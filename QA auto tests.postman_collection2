@@ -1,0 +1,913 @@
+{
+	"info": {
+		"_postman_id": "cb98c827-3777-4efd-8e8b-2e6cca0705fa",
+		"name": "QA auto tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35002320",
+		"_collection_link": "https://qa-cours.postman.co/workspace/HillelWorkSpase~454a6930-9b15-4761-8b4f-d97fbb5be961/collection/35002320-cb98c827-3777-4efd-8e8b-2e6cca0705fa?action=share&source=collection_link&creator=35002320"
+	},
+	"item": [
+		{
+			"name": "Negative email tests",
+			"item": [
+				{
+					"name": "singup Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Масив тестових невалідних email\r",
+									"const invalidEmails = [\r",
+									"  \"\",                       \r",
+									"  \"testexample.com\",        \r",
+									"  \"test@\",                  \r",
+									"  \"@example.com\",           \r",
+									"  \"test @example.com\",      \r",
+									"  \"test#mail.com\",         \r",
+									"  \"a@b.c\",                 \r",
+									"  \"veryveryverylongemailaddress_thatiswaytoolongtobevalid_becauseitexceedsthenormalcharacterlimit@example.com\" \r",
+									"];\r",
+									"\r",
+									"\r",
+									"let index = pm.environment.get(\"email_test_index\");\r",
+									"if (!index) {\r",
+									"  index = 0;\r",
+									"} else {\r",
+									"  index = parseInt(index);\r",
+									"}\r",
+									"\r",
+									"if (index >= invalidEmails.length) {\r",
+									"  index = 0; \r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Test_InvEmail_test\", invalidEmails[index]);\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"email_test_index\", index + 1);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"  pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message contains 'email' (case insensitive)\", () => {\r",
+									"  const message = pm.response.json().message.toLowerCase();\r",
+									"  pm.expect(message).to.include(\"email\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"email\": \"{{Test_InvEmail_test}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"repeatPassword\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{myURL}}/auth/signup",
+							"host": [
+								"{{myURL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://qauto2.forstudy.space/api/auth/signup' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"Qwerty12345\",\r\n  \"repeatPassword\": \"Qwerty12345\"\r\n}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile type validation",
+			"item": [
+				{
+					"name": "usersProfile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"dateBirth\": \"2021-03-17T15:21:05.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{myURL}}/users/profile",
+							"host": [
+								"{{myURL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://qauto2.forstudy.space/api/users/profile' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"dateBirth\": \"2021-03-17T15:21:05.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "usersProfile Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Profile type validation 400\", () => {\r",
+									"  pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Profile type validation message present (localized)\", () => {\r",
+									"  const msg = (pm.response.json()?.message || \"\").toLowerCase();\r",
+									"  \r",
+									"  const hits = [\"name\", \"ім'я\", \"last\", \"прізвище\", \"date\", \"дата\", \"format\", \"формат\", \"type\", \"тип\"];\r",
+									"  pm.expect(hits.some(h => msg.includes(h))).to.eql(true, `message should hint on field/type/format. got: ${msg}`);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": 12345,\r\n  \"lastName\": \"Tester\",\r\n  \"dateBirth\": \"31/12/2000\",\r\n  \"country\": \"Ukraine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{myURL}}/users/profile",
+							"host": [
+								"{{myURL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://qauto2.forstudy.space/api/users/profile' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"dateBirth\": \"2021-03-17T15:21:05.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "usersProfile lastName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Profile type validation → 400\", () => {\r",
+									"  pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Profile type validation → message present (localized)\", () => {\r",
+									"  const msg = (pm.response.json()?.message || \"\").toLowerCase();\r",
+									"\r",
+									"  const hits = [\"name\", \"ім'я\", \"last\", \"прізв\", \"date\", \"дата\", \"format\", \"формат\", \"type\", \"тип\"];\r",
+									"  pm.expect(hits.some(h => msg.includes(h))).to.eql(true, `message should hint on field/type/format. got: ${msg}`);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Test\",\r\n  \"lastName\": { \"v\": \"User\" },\r\n  \"dateBirth\": \"2000-12-31\",\r\n  \"country\": \"Ukraine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{myURL}}/users/profile",
+							"host": [
+								"{{myURL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://qauto2.forstudy.space/api/users/profile' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"dateBirth\": \"2021-03-17T15:21:05.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "singup",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let mail = pm.variables.replaceIn(\"{{$randomEmail}}\");\r",
+							"pm.collectionVariables.set(\"random_mail\", mail);\r",
+							"pm.collectionVariables.set(\"password\", \"Qwerty12345\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 1) JSON Schema\r",
+							"const schema = {\r",
+							"  type: \"object\",\r",
+							"  required: [\"status\", \"data\"],\r",
+							"  properties: {\r",
+							"    status: { type: \"string\" },\r",
+							"    data: {\r",
+							"      type: \"object\",\r",
+							"      required: [\"userId\"],\r",
+							"      properties: {\r",
+							"        userId: { type: \"integer\" },\r",
+							"        email: { type: \"string\" },\r",
+							"        photoFilename: { type: \"string\" },\r",
+							"        distanceUnits: { type: \"string\" },\r",
+							"        currency: { type: \"string\" },\r",
+							"        name: { type: \"string\" },\r",
+							"        lastName: { type: \"string\" }\r",
+							"      },\r",
+							"      additionalProperties: true\r",
+							"    }\r",
+							"  },\r",
+							"  additionalProperties: true\r",
+							"};\r",
+							"pm.test(\"Create User response matches JSON schema\", () => {\r",
+							"  pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"// 2) Перевірка валідності email\r",
+							"pm.test(\"Create User email is valid (from response or request)\", () => {\r",
+							"  const json = pm.response.json();\r",
+							"  const emailFromResp = json?.data?.email;\r",
+							"  const emailFromReq = (() => {\r",
+							"    try { return JSON.parse(pm.request.body.raw).email; } catch(e) { return undefined; }\r",
+							"  })();\r",
+							"  const email = emailFromResp || emailFromReq;\r",
+							"  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\r",
+							"  pm.expect(email, \"email should exist\").to.be.a(\"string\");\r",
+							"  pm.expect(email).to.match(emailRegex);\r",
+							"});\r",
+							"\r",
+							"// 3) Збереження userId\r",
+							"const userId = pm.response.json()?.data?.userId;\r",
+							"if (userId) pm.environment.set(\"userId\", userId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"{{$randomFirstName}}\",\r\n\"lastName\": \"{{$randomLastName}}\",\r\n\"email\": \"{{random_mail}}\",\r\n\"password\": \"{{password}}\",\r\n\"repeatPassword\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/auth/signup",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://qauto2.forstudy.space/api/auth/signup' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"Qwerty12345\",\r\n  \"repeatPassword\": \"Qwerty12345\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "singin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login 200 & ok\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.json().status).to.eql(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{random_mail}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"remember\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/auth/signin",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://qauto2.forstudy.space/api/auth/signin' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"Qwerty12345\",\r\n  \"remember\": false\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Logout 200 & ok\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"  pm.expect(pm.response.json().status).to.eql(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{myURL}}/auth/logout",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://qauto2.forstudy.space/api/auth/logout' \\\r\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "signin2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{random_mail}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"remember\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/auth/signin",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://qauto2.forstudy.space/api/auth/signin' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"Qwerty12345\",\r\n  \"remember\": false\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit User profile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const year = Math.floor(Math.random() * (2006 - 1985 + 1)) + 1985;\r",
+							"const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, \"0\");\r",
+							"const day = String(Math.floor(Math.random() * 28) + 1).padStart(2, \"0\");\r",
+							"pm.variables.set(\"dateBirth_for_update\", `${year}-${month}-${day}`);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const sent = JSON.parse(pm.request.body.raw);\r",
+							"const resp = pm.response.json().data;\r",
+							"\r",
+							"pm.test(\"Profile response matches sent fields\", () => {\r",
+							"  pm.expect(resp.name).to.eql(sent.name);\r",
+							"  pm.expect(resp.lastName).to.eql(sent.lastName);\r",
+							"  pm.expect(resp.dateBirth).to.eql(sent.dateBirth);\r",
+							"  if (sent.country !== undefined) pm.expect(resp.country).to.eql(sent.country);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Profile dateBirth format YYYY-MM-DD\", () => {\r",
+							"    const dateOnly = resp.dateBirth.substring(0, 10);\r",
+							"    const re = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+							"    pm.expect(dateOnly).to.match(re);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"dateBirth\": \"2021-03-17T15:21:05.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/users/profile",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://qauto2.forstudy.space/api/users/profile' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"dateBirth\": \"2021-03-17T15:21:05.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "changePassword",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"passwordNew\", \"ASDfgh123\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"oldPassword\": \"Qwerty12345\",\r\n  \"password\": \"ASDfgh123\",\r\n  \"repeatPassword\": \"ASDfgh123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/api/users/password",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"password"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://qauto2.forstudy.space/api/users/password' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"oldPassword\": \"FooBar12345\",\r\n  \"password\": \"Qwerty12345\",\r\n  \"repeatPassword\": \"Qwerty12345\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "createCars",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let milage = pm.variables.replaceIn(\"{{$randomInt}}\");\r",
+							"pm.collectionVariables.set(\"milage\", milage);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"car_id\", jsonData.data.id);\r",
+							"const j = pm.response.json();\r",
+							"pm.test(\"Create Car 201 & ok\", () => {\r",
+							"  pm.response.to.have.status(201);\r",
+							"  pm.expect(j.status).to.eql(\"ok\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create Car save carId\", () => {\r",
+							"  const id = j?.data?.id || j?.data?.carId;\r",
+							"  pm.expect(id, \"carId present\").to.be.a(\"number\");\r",
+							"  pm.environment.set(\"carId\", id);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carBrandId\": 1,\r\n  \"carModelId\": 1,\r\n  \"mileage\": {{milage}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/cars",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"cars"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://qauto2.forstudy.space/api/cars' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"carBrandId\": 1,\r\n  \"carModelId\": 1,\r\n  \"mileage\": 122\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "createExpenses",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carId\": 1,\r\n  \"reportedAt\": \"2021-05-17\",\r\n  \"mileage\": 111,\r\n  \"liters\": 11,\r\n  \"totalCost\": 11,\r\n  \"forceMileage\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/expenses",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"expenses"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://qauto2.forstudy.space/api/expenses' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"carId\": 1,\r\n  \"reportedAt\": \"2021-05-17\",\r\n  \"mileage\": 111,\r\n  \"liters\": 11,\r\n  \"totalCost\": 11,\r\n  \"forceMileage\": false\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "edditExpenses",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const prev = parseFloat(pm.environment.get(\"lastExpenseAmount\") || \"0\");\r",
+							"const step = Math.floor(Math.random() * 1000) + 1;\r",
+							"const next = prev + step;\r",
+							"\r",
+							"pm.environment.set(\"expenseAmount\", next);\r",
+							"\r",
+							"pm.environment.set(\"expenseDate\", new Date().toISOString());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const sent = JSON.parse(pm.request.body.raw);\r",
+							"const prev = parseFloat(pm.environment.get(\"lastExpenseAmount\") || \"0\");\r",
+							"\r",
+							"pm.test(\"Expense carId auto matches ENV\", () => {\r",
+							"  pm.expect(sent.carId).to.eql(parseInt(pm.environment.get(\"carId\"),10));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Expense amount increased\", () => {\r",
+							"  pm.expect(sent.amount).to.be.above(prev);\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"lastExpenseAmount\", String(sent.amount));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carId\": {{carId}},\r\n  \"amount\": {{expenseAmount}},\r\n  \"date\": \"{{expenseDate}}\",\r\n  \"comment\": \"auto test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{myURL}}/expenses/1",
+					"host": [
+						"{{myURL}}"
+					],
+					"path": [
+						"expenses",
+						"1"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://qauto2.forstudy.space/api/expenses/1' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"carId\": 1,\r\n  \"reportedAt\": \"2021-05-17\",\r\n  \"mileage\": 111,\r\n  \"liters\": 11,\r\n  \"totalCost\": 11,\r\n  \"forceMileage\": false\r\n}"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "random_mail",
+			"value": "Luciano_Schinner@gmail.com"
+		},
+		{
+			"key": "password",
+			"value": "Qwerty12345"
+		},
+		{
+			"key": "passwordNew",
+			"value": ""
+		},
+		{
+			"key": "milage",
+			"value": "106"
+		},
+		{
+			"key": "car_id",
+			"value": ""
+		},
+		{
+			"key": "Test_InvEmail_test",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email_test_index",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "lastExpenseAmount",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
