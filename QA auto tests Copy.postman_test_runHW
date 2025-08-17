@@ -1,0 +1,277 @@
+{
+	"id": "2b4833fb-61b3-4214-a988-1a1be1df697a",
+	"name": "QA auto tests Copy",
+	"timestamp": "2025-08-17T15:56:05.966Z",
+	"collection_id": "35002320-6a13ee5b-9dba-49d1-8672-53051babac97",
+	"folder_id": 0,
+	"environment_id": "35002320-6b91659e-3345-4f06-8cdb-d975661fc920",
+	"totalPass": 72,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-08-17T15:55:53.689Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "ac0cf6c8-bd78-47a7-a9ca-4c8881becd7e",
+			"name": "singup",
+			"url": "https://qauto2.forstudy.space/api/auth/signup",
+			"time": 754,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Response matches expected JSON schema": true,
+				"Email is valid": true,
+				"Save userId to environment": true,
+				"Save email to environment": true,
+				"Password is not empty": true
+			},
+			"testPassFailCounts": {
+				"Response matches expected JSON schema": {
+					"pass": 8,
+					"fail": 0
+				},
+				"Email is valid": {
+					"pass": 8,
+					"fail": 0
+				},
+				"Save userId to environment": {
+					"pass": 8,
+					"fail": 0
+				},
+				"Save email to environment": {
+					"pass": 8,
+					"fail": 0
+				},
+				"Password is not empty": {
+					"pass": 8,
+					"fail": 0
+				}
+			},
+			"times": [
+				875,
+				770,
+				772,
+				773,
+				851,
+				754,
+				751,
+				754
+			],
+			"allTests": [
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				},
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				},
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				},
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				},
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				},
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				},
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				},
+				{
+					"Response matches expected JSON schema": true,
+					"Email is valid": true,
+					"Save userId to environment": true,
+					"Save email to environment": true,
+					"Password is not empty": true
+				}
+			]
+		},
+		{
+			"id": "9c64ca2a-4b40-4ae6-9f1d-21333826201f",
+			"name": "singin",
+			"url": "https://qauto2.forstudy.space/api/auth/signin",
+			"time": 398,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Login 200 & ok": true
+			},
+			"testPassFailCounts": {
+				"Login 200 & ok": {
+					"pass": 8,
+					"fail": 0
+				}
+			},
+			"times": [
+				408,
+				407,
+				405,
+				407,
+				400,
+				397,
+				397,
+				398
+			],
+			"allTests": [
+				{
+					"Login 200 & ok": true
+				},
+				{
+					"Login 200 & ok": true
+				},
+				{
+					"Login 200 & ok": true
+				},
+				{
+					"Login 200 & ok": true
+				},
+				{
+					"Login 200 & ok": true
+				},
+				{
+					"Login 200 & ok": true
+				},
+				{
+					"Login 200 & ok": true
+				},
+				{
+					"Login 200 & ok": true
+				}
+			]
+		},
+		{
+			"id": "53db8a63-5483-467d-9111-8fd291543026",
+			"name": "Edit User profile",
+			"url": "https://qauto2.forstudy.space/api/users/profile",
+			"time": 47,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Profile response matches sent fields": true,
+				"dateBirth format is YYYY-MM-DD": true,
+				"country is allowed": true
+			},
+			"testPassFailCounts": {
+				"Profile response matches sent fields": {
+					"pass": 8,
+					"fail": 0
+				},
+				"dateBirth format is YYYY-MM-DD": {
+					"pass": 8,
+					"fail": 0
+				},
+				"country is allowed": {
+					"pass": 8,
+					"fail": 0
+				}
+			},
+			"times": [
+				47,
+				47,
+				46,
+				47,
+				47,
+				46,
+				46,
+				47
+			],
+			"allTests": [
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				},
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				},
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				},
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				},
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				},
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				},
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				},
+				{
+					"Profile response matches sent fields": true,
+					"dateBirth format is YYYY-MM-DD": true,
+					"country is allowed": true
+				}
+			]
+		}
+	],
+	"count": 8,
+	"totalTime": 9892,
+	"collection": {
+		"requests": [
+			{
+				"id": "ac0cf6c8-bd78-47a7-a9ca-4c8881becd7e",
+				"method": "POST"
+			},
+			{
+				"id": "9c64ca2a-4b40-4ae6-9f1d-21333826201f",
+				"method": "POST"
+			},
+			{
+				"id": "53db8a63-5483-467d-9111-8fd291543026",
+				"method": "PUT"
+			}
+		]
+	}
+}
