@@ -1,0 +1,171 @@
+{
+	"id": "d44fb112-9472-43bd-80a7-3b08ce449db5",
+	"name": "Ukrainian Cities GraphQL API Tests",
+	"timestamp": "2025-08-21T10:19:36.644Z",
+	"collection_id": "35002320-17019f73-f2c5-4845-a60d-23ca0323c446",
+	"folder_id": 0,
+	"environment_id": "35002320-2f087d76-be01-4f79-9075-772b4135e54d",
+	"totalPass": 6,
+	"delay": "500",
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-08-21T10:19:29.895Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "69fd731e-edfc-4df9-8a06-2279d95ac25d",
+			"name": "Get All Cities",
+			"url": "https://graphql-ukrainian-cities.hillel.it/graphql",
+			"time": 42,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"getAllCities is array": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 2,
+					"fail": 0
+				},
+				"getAllCities is array": {
+					"pass": 2,
+					"fail": 0
+				}
+			},
+			"times": [
+				42,
+				42
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"getAllCities is array": true
+				},
+				{
+					"Status code is 200": true,
+					"getAllCities is array": true
+				}
+			]
+		},
+		{
+			"id": "daf9f10b-56c0-4448-bdc6-26c1a264f94f",
+			"name": "Get City Descriptions (4 ids)",
+			"url": "https://graphql-ukrainian-cities.hillel.it/graphql",
+			"time": 43,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				42,
+				43
+			],
+			"allTests": [
+				{},
+				{}
+			]
+		},
+		{
+			"id": "72194474-e312-49be-84ee-e86eb3a4ff9e",
+			"name": "Get Cities in Range",
+			"url": "https://graphql-ukrainian-cities.hillel.it/graphql",
+			"time": 42,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				43,
+				42
+			],
+			"allTests": [
+				{},
+				{}
+			]
+		},
+		{
+			"id": "54646cd1-6dd7-4c4e-970e-98a82e953752",
+			"name": "Add New City",
+			"url": "https://graphql-ukrainian-cities.hillel.it/graphql",
+			"time": 42,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 2,
+					"fail": 0
+				}
+			},
+			"times": [
+				41,
+				42
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "e0ca62d4-a919-4f5e-acc0-ac283ac73723",
+			"name": "GetCityById",
+			"url": "https://graphql-ukrainian-cities.hillel.it/graphql",
+			"time": 42,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				42,
+				42
+			],
+			"allTests": [
+				{},
+				{}
+			]
+		}
+	],
+	"count": 2,
+	"totalTime": 421,
+	"collection": {
+		"requests": [
+			{
+				"id": "69fd731e-edfc-4df9-8a06-2279d95ac25d",
+				"method": "POST"
+			},
+			{
+				"id": "daf9f10b-56c0-4448-bdc6-26c1a264f94f",
+				"method": "POST"
+			},
+			{
+				"id": "72194474-e312-49be-84ee-e86eb3a4ff9e",
+				"method": "POST"
+			},
+			{
+				"id": "54646cd1-6dd7-4c4e-970e-98a82e953752",
+				"method": "POST"
+			},
+			{
+				"id": "e0ca62d4-a919-4f5e-acc0-ac283ac73723",
+				"method": "POST"
+			}
+		]
+	}
+}

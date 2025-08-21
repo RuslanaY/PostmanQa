@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "17019f73-f2c5-4845-a60d-23ca0323c446",
+		"name": "Ukrainian Cities GraphQL API Tests",
+		"description": "Postman collection for testing Ukrainian Cities GraphQL API (Full)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35002320",
+		"_collection_link": "https://qa-cours.postman.co/workspace/HillelWorkSpase~454a6930-9b15-4761-8b4f-d97fbb5be961/collection/35002320-17019f73-f2c5-4845-a60d-23ca0323c446?action=share&source=collection_link&creator=35002320"
+	},
+	"item": [
+		{
+			"name": "Get All Cities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"getAllCities is array\", function () {",
+							"    pm.expect(jsonData.data.getAllCities).to.be.an('array');",
+							"});",
+							"const cities = jsonData.data.getAllCities;",
+							"const ids = cities.map(c => parseInt(c.id));",
+							"const squares = cities.map(c => c.square);",
+							"let avg = squares.reduce((a,b)=>a+b,0)/squares.length;",
+							"",
+							"",
+							"let selected = [];",
+							"while (selected.length < 4) {",
+							"  let rnd = ids[Math.floor(Math.random()*ids.length)];",
+							"  if (!selected.includes(rnd)) selected.push(rnd);",
+							"}",
+							"",
+							"",
+							"pm.environment.set(\"cityId1\", selected[0]);",
+							"pm.environment.set(\"cityId2\", selected[1]);",
+							"pm.environment.set(\"cityId3\", selected[2]);",
+							"pm.environment.set(\"cityId4\", selected[3]);",
+							"pm.environment.set(\"avgSquare\", avg);",
+							"pm.environment.set(\"minId\", Math.min(...selected));",
+							"pm.environment.set(\"maxId\", Math.max(...selected));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query{\r\n  getAllCities{\r\n    id\r\n    name\r\n    square\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}",
+					"host": [
+						"{{baseURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get City Descriptions (4 ids)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "\r\n  query {\r\n  city1: getCityDescription(id: {{cityId1}})\r\n  city2: getCityDescription(id: {{cityId2}})\r\n  city3: getCityDescription(id: {{cityId3}})\r\n  city4: getCityDescription(id: {{cityId4}})\r\n}\r\n ",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}",
+					"host": [
+						"{{baseURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Cities in Range",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let selectedIds = [\r",
+							"    Number(pm.environment.get(\"cityId1\")),\r",
+							"    Number(pm.environment.get(\"cityId2\")),\r",
+							"    Number(pm.environment.get(\"cityId3\")),\r",
+							"    Number(pm.environment.get(\"cityId4\"))\r",
+							"];\r",
+							"\r",
+							"\r",
+							"pm.environment.set(\"minId\", Math.min(...selectedIds));\r",
+							"pm.environment.set(\"maxId\", Math.max(...selectedIds));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query{\r\n  getCityByRangeId(filter:{minId:3, maxId:8}){\r\n    id\r\n    name\r\n    square\r\n  }\r\n}"
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}",
+					"host": [
+						"{{baseURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add New City",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"if (jsonData.data && jsonData.data.addCity) {\r",
+							"    pm.environment.set(\"newCityId\", jsonData.data.addCity.id);\r",
+							"    pm.environment.set(\"newCityName\", jsonData.data.addCity.name);\r",
+							"    pm.environment.set(\"newCitySquare\", jsonData.data.addCity.square);\r",
+							"    pm.environment.set(\"newCityDescription\", jsonData.data.addCity.description || \"\");\r",
+							"} else {\r",
+							"    console.log(\"Помилка: addCity не повернув даних\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n  addCity(\r\n    name: \"New city\",\r\n    square: {{avgSquare4}}, \r\n    description: \"Best new city\"\r\n  ) {\r\n    id\r\n    name\r\n    square\r\n    ... on City {\r\n      description\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}",
+					"host": [
+						"{{baseURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCityById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"for (let i=1; i<=4; i++) {\r",
+							"    pm.environment.set(`city${i}_name`, jsonData.data[`city${i}`].name);\r",
+							"    pm.environment.set(`city${i}_square`, jsonData.data[`city${i}`].square);\r",
+							"    pm.environment.set(`city${i}_description`, jsonData.data[`city${i}`].description || \"\");\r",
+							"}\r",
+							"\r",
+							"\r",
+							"let squares4 = [];\r",
+							"for (let i=1; i<=4; i++) {\r",
+							"    squares4.push(Number(pm.environment.get(`city${i}_square`)));\r",
+							"}\r",
+							"let avgSquare4 = squares4.reduce((a,b)=>a+b,0)/squares4.length;\r",
+							"pm.environment.set(\"avgSquare4\", avgSquare4);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "\r\n query {\r\n  city1: getCityById(id: {{cityId1}}) {\r\n    id\r\n    name\r\n    square\r\n  }\r\n  city2: getCityById(id: {{cityId2}}) {\r\n    id\r\n    name\r\n    square\r\n  }\r\n  city3: getCityById(id: {{cityId3}}) {\r\n    id\r\n    name\r\n    square\r\n  }\r\n  city4: getCityById(id: {{cityId4}}) {\r\n    id\r\n    name\r\n    square\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}",
+					"host": [
+						"{{baseURL}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
