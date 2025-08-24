@@ -1,0 +1,162 @@
+{
+	"info": {
+		"_postman_id": "f8017767-504e-4e9b-b5b4-eb4cc0d45b9a",
+		"name": "Book ISBN Numbers Homework16 Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35002320",
+		"_collection_link": "https://qa-cours.postman.co/workspace/HillelWorkSpase~454a6930-9b15-4761-8b4f-d97fbb5be961/collection/35002320-f8017767-504e-4e9b-b5b4-eb4cc0d45b9a?action=share&source=collection_link&creator=35002320"
+	},
+	"item": [
+		{
+			"name": "GetBookByISBN13",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const parseString = require('xml2js').parseString;",
+							"",
+							"parseString(pm.response.text(), { explicitArray: false }, function (err, parsed) {",
+							"    if (err) throw new Error('Response is not valid XML');",
+							"",
+							"    const body = parsed['soap:Envelope']?.['soap:Body'];",
+							"    const responseKey = body ? Object.keys(body)[0] : null;",
+							"    let result;",
+							"",
+							"    if (responseKey && body[responseKey]) {",
+							"        ",
+							"        const innerKey = Object.keys(body[responseKey])[0];",
+							"        result = body[responseKey][innerKey];",
+							"    }",
+							"",
+							"    pm.test('Header Content-Type exists', () => pm.response.to.have.header('Content-Type'));",
+							"    pm.test('Content-Type is XML', () => pm.expect(pm.response.headers.get('Content-Type')).to.include('xml'));",
+							"    pm.test('Header Date exists', () => pm.response.to.have.header('Date'));",
+							"    pm.test('SOAPAction header exists', () => pm.expect(pm.request.headers.has('SOAPAction')).to.be.true);",
+							"",
+							"    pm.test('Response time < 2000ms', () => pm.expect(pm.response.responseTime).to.be.below(2000));",
+							"    pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8"
+					},
+					{
+						"key": "SOAPAction",
+						"value": "http://webservices.daehosting.com/ISBN/IsValidISBN13"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <IsValidISBN13 xmlns=\"http://webservices.daehosting.com/ISBN\">\n      <sISBN>9780134685991</sISBN>\n    </IsValidISBN13>\n  </soap:Body>\n</soap:Envelope>"
+				},
+				"url": {
+					"raw": "{{MainURL}}",
+					"host": [
+						"{{MainURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBookByISBN10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const parseString = require('xml2js').parseString;",
+							"",
+							"parseString(pm.response.text(), { explicitArray: false }, function (err, parsed) {",
+							"    if (err) throw new Error('Response is not valid XML');",
+							"",
+							"    const body = parsed['soap:Envelope']?.['soap:Body'];",
+							"    const responseKey = body ? Object.keys(body)[0] : null; ",
+							"    let result;",
+							"",
+							"    if (responseKey && body[responseKey]) {",
+							"        const innerKey = Object.keys(body[responseKey])[0];",
+							"        result = body[responseKey][innerKey];",
+							"    }",
+							"",
+							"    pm.test('Header Content-Type exists', () => pm.response.to.have.header('Content-Type'));",
+							"    pm.test('Content-Type includes xml', () => pm.expect(pm.response.headers.get('Content-Type')).to.include('xml'));",
+							"    pm.test('Header Date exists', () => pm.response.to.have.header('Date'));",
+							"    pm.test('SOAPAction header exists', () => pm.expect(pm.request.headers.has('SOAPAction')).to.be.true);",
+							"",
+							"    pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+							"    pm.test('Response time < 2000ms', () => pm.expect(pm.response.responseTime).to.be.below(2000));",
+							"    pm.test('Response is not empty', () => pm.expect(pm.response.text()).to.not.be.empty);",
+							"    pm.test('Response contains <soap:Envelope>', () => pm.expect(pm.response.text()).to.include('<soap:Envelope'));",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8"
+					},
+					{
+						"key": "SOAPAction",
+						"value": "http://webservices.daehosting.com/ISBN/IsValidISBN10"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <IsValidISBN10 xmlns=\"http://webservices.daehosting.com/ISBN\">\n      <sISBN>0134685997</sISBN>\n    </IsValidISBN10>\n  </soap:Body>\n</soap:Envelope>"
+				},
+				"url": {
+					"raw": "{{MainURL}}",
+					"host": [
+						"{{MainURL}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "MainURL",
+			"value": "https://webservices.daehosting.com/services/isbnservice.wso"
+		}
+	]
+}
